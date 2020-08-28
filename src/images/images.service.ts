@@ -14,7 +14,8 @@ export class ImagesService {
   }
 
   async getAllImages(): Promise<IImage[]> {
-    return this.imageModel.find().exe();
+    return await this.imageModel.find().exec();
+
   }
 
   async createPost(image: CreateImageDto): Promise<any> {
