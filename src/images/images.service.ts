@@ -10,17 +10,27 @@ export class ImagesService {
 
   constructor(
     @InjectModel('images') private readonly imageModel: Model<IImage>,
-    private uploadService: UploadService
+    private uploadService: UploadService,
   ) {
 
   }
 
   async getAllImages(): Promise<IImage[]> {
-    return await this.imageModel.find().exec();
-
+    let images = await this.imageModel.find().exec();
+    images = images.map(image => {
+      image.url =`${process.env.APP_ADDRESS}${image.url}`
+      return image;
+    });
+    return images;
   }
 
   async createPost(image: CreateImageDto): Promise<any> {
     return this.imageModel.create(image);
   }
+
+  async deleteImage(_id: string): Promise<any> {
+    await this.imageModel.findByIdAndRemove(_id).exec();
+    return { deleted: true };
+  }
+
 }

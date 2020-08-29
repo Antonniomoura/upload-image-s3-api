@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Req, Post, HttpException } from '@nestjs/common';
+import { Body, Controller, Get, Req, Post, HttpException, Delete, Param } from '@nestjs/common';
 import { IImage } from './interface/image.interface';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dtos/create-image.dto';
@@ -21,5 +21,11 @@ export class ImagesController {
     }
     image.idUser = code;
     return this.imagesService.createPost(image);
+  }
+
+
+  @Delete(':_id')
+  async deleteImage(@Param('_id') _id: string): Promise<void> {
+    await this.imagesService.deleteImage(_id);
   }
 }
