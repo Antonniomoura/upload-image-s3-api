@@ -21,7 +21,7 @@ export class UploadService {
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: urlKey,
       ContentType: 'image/png',
-      ACL: 'public-read'
+      ACL: 'public-read',
     };
 
     return await this.s3.putObject(params).promise().then(() => {
@@ -29,5 +29,15 @@ export class UploadService {
     }, () => {
       throw new BadRequestException('Error no upload do arquivo');
     });
+  }
+
+  async deleteImagem(key: string): Promise<any> {
+    console.log(key)
+    return await this.s3.deleteObject({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key,
+    }).promise()
+      .then(response => response)
+      .catch(response => response);
   }
 }

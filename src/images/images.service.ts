@@ -18,7 +18,7 @@ export class ImagesService {
   async getAllImages(): Promise<IImage[]> {
     let images = await this.imageModel.find().exec();
     images = images.map(image => {
-      image.url =`${process.env.APP_ADDRESS}${image.url}`
+      image.url = `${process.env.APP_ADDRESS}${image.url}`;
       return image;
     });
     return images;
@@ -29,8 +29,9 @@ export class ImagesService {
   }
 
   async deleteImage(_id: string): Promise<any> {
+    const image = await this.imageModel.findOne({ _id }).exec();
     await this.imageModel.findByIdAndRemove(_id).exec();
+    await this.uploadService.deleteImagem(image.url);
     return { deleted: true };
   }
-
 }
