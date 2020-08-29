@@ -14,18 +14,20 @@ export class UploadService {
   }
 
   async uploadFile(file: any): Promise<any> {
-    const urlKey = `imagem/${uuidv4()}-${file.originalname.replace(' ', '')}`;
+    const urlKey = `${uuidv4()}-${file.originalname.replace(' ', '')}`;
 
     const params = {
       Body: file.buffer,
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: urlKey,
+      ContentType: 'image/png',
+      ACL: 'public-read'
     };
 
     return await this.s3.putObject(params).promise().then(() => {
       return { urlKey: urlKey };
     }, () => {
-      throw new BadRequestException('Error no upload do arquivo')
+      throw new BadRequestException('Error no upload do arquivo');
     });
   }
 }
