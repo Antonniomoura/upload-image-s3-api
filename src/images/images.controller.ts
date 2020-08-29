@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Req, Post, HttpException } from '@nestjs/common';
 import { IImage } from './interface/image.interface';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dtos/create-image.dto';
@@ -14,7 +14,12 @@ export class ImagesController {
   }
 
   @Post()
-  async createPost(@Body() image: CreateImageDto): Promise<any> {
+  async createPost(@Req() request, @Body() image: CreateImageDto): Promise<any> {
+    const { code } = request.headers;
+    if (!code) {
+      throw new HttpException('User id não encontrado', 503);
+    }
+    image.idUser = code;
     return this.imagesService.createPost(image);
   }
 }
