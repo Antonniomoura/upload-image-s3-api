@@ -47,6 +47,16 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
+        script: export ${{ secrets.AWS_S3_BUCKET_NAME }} && export ${{ secrets.ACCESS_KEY_ID }} && export ${{ secrets.SECRET_ACCESS_KEY }} && export ${{ secrets.DATABASE_URL }} && export ${{ secrets.APP_ADDRESS }}
+      
+        
+    - name: Run npm install in aws server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
         script: cd ~/web/upload-image-s3-api/ && npm install
       
     - name: Restart pm2
@@ -56,5 +66,5 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
-        script: pm2 restart server
+        script: pm2 restart main
         
