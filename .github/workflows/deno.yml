@@ -1,4 +1,5 @@
 # This is a basic workflow to help you get started with Actions
+
 name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -22,7 +23,13 @@ jobs:
       uses: actions/setup-node@v2.1.1
       with:
         node-version: 12.x
-            
+      
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run Build
+      run: npm run build
+    
     - name: copy to aws
       uses: appleboy/scp-action@master
       with:
@@ -49,4 +56,5 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
-        script: pm2 restart npm
+        script: pm2 restart server
+        
